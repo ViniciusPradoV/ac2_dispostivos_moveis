@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AC2_programacao_dispositivos_moveis</string>
+    <string name="total_amount_format">Total: %1$.2f</string>
+</resources>

@@ -1,11 +1,10 @@
 package com.example.ac2_programacao_dispositivos_moveis;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import expenses.fragment.ExpensesFragment;
+import com.example.ac2_programacao_dispositivos_moveis.expenses.fragment.ExpensesFragment;
 
 
 public class MainActivity extends AppCompatActivity {

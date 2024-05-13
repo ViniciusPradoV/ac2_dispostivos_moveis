@@ -1,4 +1,4 @@
-package expenses.fragment;
+package com.example.ac2_programacao_dispositivos_moveis.expenses.fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -23,8 +23,9 @@ import com.example.ac2_programacao_dispositivos_moveis.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import expenses.adapter.ExpenseItem;
-import expenses.adapter.ExpensesAdapter;
+import com.example.ac2_programacao_dispositivos_moveis.expenses.adapter.ExpenseItem;
+import com.example.ac2_programacao_dispositivos_moveis.expenses.adapter.ExpensesAdapter;
+import com.example.ac2_programacao_dispositivos_moveis.repositories.ExpensesRepository;
 
 
 public class ExpensesFragment extends Fragment {
@@ -32,6 +33,8 @@ public class ExpensesFragment extends Fragment {
     private List<ExpenseItem> expenseItems = new ArrayList<>();
     private ExpensesAdapter expensesAdapter;
     private TextView textViewTotalAmount;
+
+    private ExpensesRepository expenseRepository = new ExpensesRepository();
 
     @Nullable
     @Override
@@ -41,7 +44,7 @@ public class ExpensesFragment extends Fragment {
         RecyclerView recyclerViewExpenses = rootView.findViewById(R.id.recyclerViewExpenses);
         textViewTotalAmount = rootView.findViewById(R.id.textViewTotalAmount);
 
-        expensesAdapter = new ExpensesAdapter(expenseItems);
+        expensesAdapter = new ExpensesAdapter(expenseItems, new ExpensesRepository());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewExpenses.setLayoutManager(layoutManager);
         recyclerViewExpenses.setAdapter(expensesAdapter);
@@ -57,10 +60,12 @@ public class ExpensesFragment extends Fragment {
     }
 
     private void loadExpenseData() {
-        expenseItems.add(new ExpenseItem(50.00, "A"));
-        expenseItems.add(new ExpenseItem(25.00, "B"));
-        expenseItems.add(new ExpenseItem(12.99, "C"));
-        expensesAdapter.notifyDataSetChanged();
+        expenseRepository.getExpenses().observe(getViewLifecycleOwner(), expenses -> {
+            expenseItems.clear();
+            expenseItems.addAll(expenses);
+            expensesAdapter.notifyDataSetChanged();
+            updateTotalAmount();
+        });
     }
 
     private void promptForExpenseAmount() {
@@ -85,10 +90,17 @@ public class ExpensesFragment extends Fragment {
             String enteredDescription = descriptionInput.getText().toString();
             try {
                 double enteredAmount = Double.parseDouble(enteredAmountString);
-                expenseItems.add(new ExpenseItem(enteredAmount, enteredDescription));
-                expensesAdapter.notifyItemInserted(expenseItems.size() - 1);
+                ExpenseItem newExpenseItem = new ExpenseItem(enteredAmount, enteredDescription);
 
-                updateTotalAmount();
+                expenseRepository.addExpense(newExpenseItem, task -> {
+                    if (task.isSuccessful()) {
+                        expenseItems.add(newExpenseItem);
+                        expensesAdapter.notifyItemInserted(expenseItems.size() - 1);
+                        updateTotalAmount();
+                    } else {
+                        Toast.makeText(requireContext(), "Erro ao adicionar despesa!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             } catch (NumberFormatException e) {
                 Toast.makeText(requireContext(), "Quantia inválida!", Toast.LENGTH_SHORT).show();
             }

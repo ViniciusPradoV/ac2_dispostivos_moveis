@@ -1,4 +1,4 @@
-package expenses.adapter;
+package com.example.ac2_programacao_dispositivos_moveis.expenses.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +12,17 @@ import com.example.ac2_programacao_dispositivos_moveis.R;
 
 import java.util.List;
 
+import com.example.ac2_programacao_dispositivos_moveis.repositories.ExpensesRepository;
+
 public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ExpenseViewHolder> {
+    private final ExpensesRepository expensesRepository;
+
 
     private List<ExpenseItem> expenseList;
 
-    public ExpensesAdapter(List<ExpenseItem> expenseList) {
+    public ExpensesAdapter(List<ExpenseItem> expenseList, ExpensesRepository expensesRepository) {
         this.expenseList = expenseList;
+        this.expensesRepository = expensesRepository;
     }
 
     @NonNull
@@ -39,14 +44,9 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
         return expenseList.size();
     }
 
-    public void submitList(List<ExpenseItem> newExpenseList) {
-        this.expenseList = newExpenseList;
-        notifyDataSetChanged();
-    }
-
     static class ExpenseViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewAmount;
-        private TextView textViewDescription;
+        private final TextView textViewAmount;
+        private final TextView textViewDescription;
 
         ExpenseViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -55,7 +55,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.Expens
         }
 
         void bindExpense(ExpenseItem expenseItem) {
-            textViewAmount.setText(String.format("$%.2f", expenseItem.getAmount()));
+            textViewAmount.setText(String.format("%.2f R$", expenseItem.getAmount()));
             textViewDescription.setText(expenseItem.getDescription());
         }
     }

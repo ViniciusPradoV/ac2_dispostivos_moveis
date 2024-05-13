@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "102702446335",
+    "project_id": "ac2dispositivos-moveis",
+    "storage_bucket": "ac2dispositivos-moveis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102702446335:android:8be162d2c772eaac8fbeca",
+        "android_client_info": {
+          "package_name": "com.example.ac2_programacao_dispositivos_moveis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFd-qGD4SUe9_JMs0PmKQC0Al4taZT6Ls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

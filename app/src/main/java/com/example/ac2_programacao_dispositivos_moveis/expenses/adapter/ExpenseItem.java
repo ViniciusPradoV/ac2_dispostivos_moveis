@@ -1,8 +1,13 @@
-package expenses.adapter;
+package com.example.ac2_programacao_dispositivos_moveis.expenses.adapter;
 
-public class ExpenseItem {
+import java.io.Serializable;
+
+public class ExpenseItem implements Serializable {
     private double amount;
     private String description;
+
+    public ExpenseItem() {
+    }
 
     public ExpenseItem(double amount, String description) {
         this.amount = amount;

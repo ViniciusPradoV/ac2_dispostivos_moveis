@@ -17,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private Button loginButton;
+    private Button registerButton;
 
     private FirebaseAuth firebaseAuth;
 
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.editTextEmail);
         passwordEditText = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.buttonLogin);
+        registerButton = findViewById(R.id.buttonRegister);
 
         // Handle login button click
         loginButton.setOnClickListener(view -> {
@@ -44,9 +46,32 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Login falhou", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
+
+        registerButton.setOnClickListener(view -> {
+            String email = emailEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+
+            if(email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Email e password não podem ser vazios!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+
+                            Toast.makeText(this, "Cadastro concluído!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "Cadastro falhou, por favor, tente novamente", Toast.LENGTH_SHORT).show();
                         }
                     });
         });
     }
+
 }

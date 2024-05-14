@@ -17,7 +17,7 @@ public class ExpensesRepository {
     MutableLiveData<List<ExpenseItem>> expensesLiveData = new MutableLiveData<>();
     public void addExpense(ExpenseItem expenseItem, OnCompleteListener<DocumentReference> onCompleteListener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("com/example/ac2_programacao_dispositivos_moveis/expenses").add(expenseItem)
+        db.collection("expenses").add(expenseItem)
                 .addOnCompleteListener(onCompleteListener)
                 .addOnFailureListener(e -> {
                     throw new RuntimeException(e.getCause());
@@ -26,7 +26,7 @@ public class ExpensesRepository {
 
     public LiveData<List<ExpenseItem>> getExpenses() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("com/example/ac2_programacao_dispositivos_moveis/expenses").get().addOnCompleteListener(task -> {
+        db.collection("expenses").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<ExpenseItem> expenses = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {

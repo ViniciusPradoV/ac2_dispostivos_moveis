@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".login.LoginActivity">
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -27,5 +27,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextPassword"
         android:text="Login" />
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonLogin"
+        android:text="Register" />
+
 
 </RelativeLayout>

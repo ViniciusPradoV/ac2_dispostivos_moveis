@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ac2_programacao_dispositivos_moveis.expenses.fragment.ExpensesFragment;
 
+// Nome: Vinicius do Prado Vieira
+// RA: 155118
+
 
 public class MainActivity extends AppCompatActivity {
         @Override

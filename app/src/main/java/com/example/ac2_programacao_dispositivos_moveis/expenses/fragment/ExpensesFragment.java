@@ -1,8 +1,10 @@
 package com.example.ac2_programacao_dispositivos_moveis.expenses.fragment;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +21,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ac2_programacao_dispositivos_moveis.R;
+import com.example.ac2_programacao_dispositivos_moveis.expenses.adapter.ExpenseItem;
+import com.example.ac2_programacao_dispositivos_moveis.expenses.adapter.ExpensesAdapter;
+import com.example.ac2_programacao_dispositivos_moveis.login.LoginActivity;
+import com.example.ac2_programacao_dispositivos_moveis.repositories.ExpensesRepository;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.example.ac2_programacao_dispositivos_moveis.expenses.adapter.ExpenseItem;
-import com.example.ac2_programacao_dispositivos_moveis.expenses.adapter.ExpensesAdapter;
-import com.example.ac2_programacao_dispositivos_moveis.repositories.ExpensesRepository;
 
 
 public class ExpensesFragment extends Fragment {
@@ -33,6 +36,8 @@ public class ExpensesFragment extends Fragment {
     private List<ExpenseItem> expenseItems = new ArrayList<>();
     private ExpensesAdapter expensesAdapter;
     private TextView textViewTotalAmount;
+
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     private ExpensesRepository expenseRepository = new ExpensesRepository();
 
@@ -56,11 +61,21 @@ public class ExpensesFragment extends Fragment {
         Button addButton = rootView.findViewById(R.id.buttonAddExpense);
         addButton.setOnClickListener(v -> promptForExpenseAmount());
 
+        Button btnLogout = rootView.findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        });
+
+
         return rootView;
     }
 
     private void loadExpenseData() {
-        expenseRepository.getExpenses().observe(getViewLifecycleOwner(), expenses -> {
+        Log.d("uid", firebaseAuth.getCurrentUser().getUid());
+        expenseRepository.getExpenses(firebaseAuth.getCurrentUser().getUid()).observe(getViewLifecycleOwner(), expenses -> {
             expenseItems.clear();
             expenseItems.addAll(expenses);
             expensesAdapter.notifyDataSetChanged();
@@ -90,7 +105,7 @@ public class ExpensesFragment extends Fragment {
             String enteredDescription = descriptionInput.getText().toString();
             try {
                 double enteredAmount = Double.parseDouble(enteredAmountString);
-                ExpenseItem newExpenseItem = new ExpenseItem(enteredAmount, enteredDescription);
+                ExpenseItem newExpenseItem = new ExpenseItem(enteredAmount, enteredDescription, firebaseAuth.getCurrentUser().getUid());
 
                 expenseRepository.addExpense(newExpenseItem, task -> {
                     if (task.isSuccessful()) {

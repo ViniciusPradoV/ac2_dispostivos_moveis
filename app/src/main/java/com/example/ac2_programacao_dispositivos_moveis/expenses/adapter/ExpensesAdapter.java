@@ -15,14 +15,12 @@ import java.util.List;
 import com.example.ac2_programacao_dispositivos_moveis.repositories.ExpensesRepository;
 
 public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ExpenseViewHolder> {
-    private final ExpensesRepository expensesRepository;
 
 
     private List<ExpenseItem> expenseList;
 
     public ExpensesAdapter(List<ExpenseItem> expenseList, ExpensesRepository expensesRepository) {
         this.expenseList = expenseList;
-        this.expensesRepository = expensesRepository;
     }
 
     @NonNull

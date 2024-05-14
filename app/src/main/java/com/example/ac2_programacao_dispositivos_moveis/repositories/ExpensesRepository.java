@@ -24,9 +24,9 @@ public class ExpensesRepository {
                 });
     }
 
-    public LiveData<List<ExpenseItem>> getExpenses() {
+    public LiveData<List<ExpenseItem>> getExpenses(String uid) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("expenses").get().addOnCompleteListener(task -> {
+        db.collection("expenses") .whereEqualTo("uid", uid) .get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<ExpenseItem> expenses = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
